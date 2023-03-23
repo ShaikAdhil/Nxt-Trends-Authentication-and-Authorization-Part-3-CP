@@ -1,11 +1,15 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import ProductCard from '../ProductCard'
+
 import './index.css'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 class AllProductsSection extends Component {
   state = {
     productsList: [],
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -32,7 +36,7 @@ class AllProductsSection extends Component {
         imageUrl: eachItem.image_url,
         rating: eachItem.rating,
       }))
-      this.setState({productsList: updatedData})
+      this.setState({productsList: updatedData, isLoading: false})
     }
   }
 
@@ -51,7 +55,18 @@ class AllProductsSection extends Component {
   }
 
   render() {
-    return <>{this.renderProductsList()}</>
+    const {isLoading} = this.state
+    return (
+      <>
+        {isLoading ? (
+          <div data-testid="loader" className="loader-spinner">
+            <Loader type="Oval" color="black" height={50} width={50} />
+          </div>
+        ) : (
+          this.renderProductsList()
+        )}
+      </>
+    )
   }
 }
 
